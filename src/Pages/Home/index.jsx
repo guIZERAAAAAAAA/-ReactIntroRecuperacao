@@ -1,38 +1,50 @@
 import { Link } from 'react-router-dom'
 import './style.css'
+import { useEffect, useState } from 'react'
+import Card from '../../Componentes/Card';
+import { getCharacters } from '../../api/rickANDMorty';
+
+
 
 function Home() {
-return(
-  <>
-  
+  const [carregando, setCarregando] = useState(true);
+  const [personagens, setPersonagens] = useState([]);
 
-  <Link to='/Atividade1' >
-  <button>Atividade1</button>
-  </Link>
+  useEffect(() => {
+    async function carregar() {
+      const dados = await getCharacters()
+      setPersonagens(dados)
+      setCarregando(false)
+    }
 
-  <Link to='/Atividade2' >
-  <button>Atividade2</button>
-  </Link>
-
-  <Link to='/Atividade3' >
-  <button>Atividade3</button>
-  </Link>
-
-  <Link to='/Atividade4' >
-  <button>Atividade4</button>
-  </Link>
-
-  <Link to='/Mundo' >
-  <button>Mundo</button>
-  </Link>
+    carregar()
+  }, [])
 
 
-  </>
+
+  if (carregando) {
+    return (<> carregando ... </>
+    )
+  }
+
+  return (
+
+    <div>
+      <h2 className='titulo-lista'>Personagens - Rick and Mory </h2>
 
 
-)
+      <div className='lista-personagens'>
+        {personagens.map((personagem) => (
+          <Card personagem={personagem} />
 
 
+        ))}
+
+
+      </div>
+    </div>
+
+  )
 }
 
 export default Home
